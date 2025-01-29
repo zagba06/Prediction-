@@ -29,6 +29,9 @@ def webhook():
     bot.process_new_updates([update])
     return '', 200
 
+bot.remove_webhook()  # Supprime l'ancien webhook, si un existe
+bot.set_webhook(url="https://ton_domaine.com/webhook")  # Définit le nouveau webhook
+
 if __name__ == "__main__":
     # Flask sera géré par Gunicorn en production, donc cette ligne est inutile
     pass
