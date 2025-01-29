@@ -13,7 +13,8 @@ import telebot
 from telebot.types import ReplyKeyboardMarkup, KeyboardButton
 import numpy as np 
 
-from flask import Flask
+from flask import Flask, request
+import telebot
 
 app = Flask(__name__)
 
@@ -21,9 +22,16 @@ app = Flask(__name__)
 def home():
     return 'Bot is running!'
 
-if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000)  # Le serveur écoute sur le port 5000
+@app.route('/webhook', methods=['POST'])
+def webhook():
+    json_str = request.get_data().decode('UTF-8')
+    update = telebot.types.Update.de_json(json_str)
+    bot.process_new_updates([update])
+    return '', 200
 
+if __name__ == "__main__":
+    # Flask sera géré par Gunicorn en production, donc cette ligne est inutile
+    pass
 
 # Initialisation du bot avec le token
 
